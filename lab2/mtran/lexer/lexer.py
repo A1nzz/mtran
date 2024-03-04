@@ -200,20 +200,17 @@ class Lexer:
         
         pattern = r'std::\s*(vector|map|set|unordered_map|list|queue|deque)\s*<\s*(.*?)\s*>\s*(\w+)'
 
+        table_data = []
+        headers = ["Тип контейнера", "Тип данных", "Имя контейнера"]
         matches = re.findall(pattern, code)
-        print("Найденные контейнеры:")
         for match in matches:
             container_type = match[0]
             container_data_type = match[1]
             container_name = match[2]
-            print(f"Тип контейнера: {container_type}, Тип данных: {container_data_type}, Имя контейнера: {container_name}")
+            table_data.append([container_type, container_data_type, container_name])
 
-        with open('tokenize.txt', "w") as file:
-            for token in self.tokens:
-                if token.value in var_map:
-                    file.write(var_map[token.value][0])
-                    file.write(' ')
-                else:
-                    file.write(token.value)
-                    file.write(' ') 
+            # print(f"Тип контейнера: {container_type}, Тип данных: {container_data_type}, Имя контейнера: {container_name}")
+        table = tabulate(table_data, headers, tablefmt="fancy_grid")
+        print("Найденные контейнеры:")
+        print(table)
         return self.func_list, self.errors
